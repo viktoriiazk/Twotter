@@ -1,48 +1,22 @@
 <template>
 <div id="app">
-{{user.userName}} - {{ fullName }}
-<strong>Followers:{{ followers }}</strong>
-<button @click="followUser">Follow</button>
+<UserProfile/>
 </div>
 </template>
 
 <script>
-
+import UserProfile from "./components/UserProfile";
 export default {
-  name: 'App',
-  data() {
-    return {
-      followers: 0,
-      user: {
-        id: 1,
-        userName: '_viktoriiazk',
-        firstName: 'Viktoriia',
-        lastName: 'Zakorchemna',
-        email: 'viktoriia.zakorchemna@gmail.com',
-        isAdmin: true
-      }
-    }
-  },
-  computed:  {
-    fullName() {
-return `${this.user.firstName} ${this.user.lastName}`;
-
-    }
-    
-  },
-  methods: {
-    followUser() {
-      return this.followers++
-    }
-  },
-  mounted() {
-    this.followUser();
-  }
+name: 'App',
+components: { UserProfile }
 }
 </script>
 
 
 <style>
+body {
+  background-color: #c5cbc5;
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -53,5 +27,6 @@ return `${this.user.firstName} ${this.user.lastName}`;
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100vw;
 }
 </style>
