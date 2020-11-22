@@ -1,58 +1,64 @@
 <template>
- <form class="create-twoot-panel" @submit.prevent="createNewTwoot" :class="{ '--exceeted': newTwootCaracterCount > 180 }">
-        <label for="newTwoot">
-          <strong>New Twoot ({{ newTwootCaracterCount }}/ 180)</strong>
-        </label>
-        <textarea id="newTwoot" rows="4" v-model="newTwootContent" />
+  <form
+    class="create-twoot-panel"
+    @submit.prevent="createNewTwoot"
+    :class="{ '--exceeted': newTwootCaracterCount > 180 }"
+  >
+    <label for="newTwoot">
+      <strong>New Twoot ({{ newTwootCaracterCount }}/ 180)</strong>
+    </label>
+    <textarea id="newTwoot" rows="4" v-model="state.newTwootContent" />
 
-<div class="create-twoot-panel__submit">
- <div class="create-twoot-type">
-          <label for="newTwootType"> <strong>Type:</strong></label>
-          <select id="newTwootType" v-model="selectedTwootType">
-            <option
-              :value="option.value"
-              v-for="(option, index) in twootTypes"
-              :key="index"
-            >
-              {{ option.name }}
-            </option>
-          </select>
-        </div>
+    <div class="create-twoot-panel__submit">
+      <div class="create-twoot-type">
+        <label for="newTwootType"> <strong>Type:</strong></label>
+        <select id="newTwootType" v-model="state.selectedTwootType">
+          <option
+            :value="option.value"
+            v-for="(option, index) in state.twootTypes"
+            :key="index"
+          >
+            {{ option.name }}
+          </option>
+        </select>
+      </div>
 
-        <button>Twoot It!</button>
-</div>
-       
-      </form>
+      <button>Twoot It!</button>
+    </div>
+  </form>
 </template>
 
 <script>
+import { reactive, computed } from 'vue';
+
 export default {
-    name: "CreateTwootPanel",
-    data() {
-    return {
-      newTwootContent: "",
+  name: "CreateTwootPanel",
+  setup(props, ctx) {
+    const state = reactive({
+      newTwootContent: '',
       selectedTwootType: "instant",
       twootTypes: [
         { value: "draft", name: "Draft" },
-        { value: "instant", name: "Instant Twoot" },
-      ],
-     
+        { value: "instant", name: "Instant Twoot" }
+      ]
+    })
+
+    const newTwootCharacterCount = computed(() => state.newTwootContent.length)
+
+    function  createNewTwoot() {
+      if (state.newTwootContent && state.selectedTwootType !== "draft") {
+        ctx.emit("add-twoot", state.newTwootContent);
+        state.newTwootContent = "";
+      }
+    }
+
+    return {
+      state,
+      newTwootCharacterCount,
+      createNewTwoot,
     };
   },
-  computed: {
-    newTwootCaracterCount() {
-return this.newTwootContent.length;
-    }
-  },
-  methods: {
-    createNewTwoot() {
-      if (this.newTwootContent && this.selectedTwootType !== "draft") {
-        this.$emit('add-twoot', this.newTwootContent)  
-        this.newTwootContent = '';
-      }
-    },
-  },
-}
+};
 </script>
 <style lang="scss" scoped>
 .create-twoot-panel {
@@ -61,7 +67,7 @@ return this.newTwootContent.length;
   display: flex;
   flex-direction: column;
   textarea {
-    border: 1px solid #DFE3E8;
+    border: 1px solid #dfe3e8;
     border-radius: 5px;
   }
   .create-twoot-panel__submit {
