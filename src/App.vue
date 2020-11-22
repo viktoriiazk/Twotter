@@ -13,7 +13,7 @@ components: { UserProfile }
 </script>
 
 
-<style>
+<style lang="scss">
 body {
   background-color: #c5cbc5;
 }
