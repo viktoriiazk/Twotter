@@ -7,9 +7,35 @@
       <div class="user-profile__follower-count">
         <strong>Followers: </strong> {{ followers }}
       </div>
+<form class="user-profile__create-twoot" @submit.prevent="createNewTwoot">
+  <label for="newTwoot">
+    <strong>New Twoot</strong>
+  </label>
+  <textarea id="newTwoot" rows="4" v-model="newTwootContent"/>
+
+
+  <div class="user-profile_create-twoot-type">
+    <label for="newTwootType"> <strong>Type:</strong></label>
+    <select id="newTwootType" v-model="selectedTwootType" >
+ <option :value="option.value" v-for="(option, index) in twootTypes" :key="index">
+      {{ option.name }}
+    </option>
+    </select>
+  </div>
+
+  <button>
+    Twoot!
+  </button>
+</form>
+
     </div>
     <div class="user-profile__twoots-wrapper">
-        <TwootItem v-for="twoot in user.twoots" :key="twoot.id" :username="user.username" :twoot="twoot" @favourite="toggleFavourite" />
+        <TwootItem 
+        v-for="twoot in user.twoots" 
+        :key="twoot.id" 
+        :username="user.username" 
+        :twoot="twoot" 
+        @favourite="toggleFavourite" />
     </div>
   </div>
 </template>
@@ -21,6 +47,12 @@ export default {
   components: { TwootItem },
   data() {
     return {
+      newTwootContent: '',
+      selectedTwootType: 'instant',
+      twootTypes: [
+        { value: 'draft', name: 'Draft'},
+        { value: 'instant', name: 'Instant Twoot'}
+      ],
       followers: 0,
       user: {
         id: 1,
@@ -60,6 +92,13 @@ export default {
     },
     toggleFavourite(id) {
       console.log(`Favourited Twoot ${id}`);
+    },
+    createNewTwoot() {
+      if (this.newTwootContent && this.selectedTwootType !== 'draft') {
+        this.user.twoots.unshift (
+           { id: this.user.twoots.length + 1,
+           content: this.newTwootContent})
+      }
     }
   },
   mounted() {
@@ -101,4 +140,19 @@ export default {
   max-width: 700px;
   width: 100%;
 }
+.user-profile__follower-count {
+  text-align-last: start;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 10px;
+}
+textarea {
+  width: 300px;
+  border: 1px solid #abb2ab;
+  border-radius: 5px;
+}
+
 </style>
