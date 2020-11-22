@@ -14,19 +14,27 @@ components: { UserProfile }
 
 
 <style lang="scss">
-body {
-  background-color: #c5cbc5;
-}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100vw;
+  min-height: 100vh;
+  background-color: #F3F5FA;
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 5%;
+    background-color: deeppink;
+    color: white;
+    .navigation__logo {
+      font-weight: bold;
+      font-size: 24px;
+    }
+    .navigation__user {
+      font-weight: bold;
+    }
+  }
 }
 </style>

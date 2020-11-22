@@ -1,34 +1,22 @@
+
 <template>
   <div class="user-profile">
-    <div class="user-profile__user-panel">
-      <h1 class="user-profile__username">@{{ user.username }}</h1>
+    <div class="user-profile__sidebar">
+      <div class="user-profile__user-panel">
+<h1 class="user-profile__username">@{{ user.username }}</h1>
       <div class="user-profile_admin-badge" v-if="user.isAdmin">Admin</div>
       <div class="user-profile_user-badge" v-else>Not Admin</div>
       <div class="user-profile__follower-count">
         <strong>Followers: </strong> {{ followers }}
       </div>
-      <form class="user-profile__create-twoot" @submit.prevent="createNewTwoot" :class="{ '--exceeted': newTwootCaracterCount > 180 }">
-        <label for="newTwoot">
-          <strong>New Twoot ({{ newTwootCaracterCount }}/ 180)</strong>
-        </label>
-        <textarea id="newTwoot" rows="4" v-model="newTwootContent" />
-
-        <div class="user-profile_create-twoot-type">
-          <label for="newTwootType"> <strong>Type:</strong></label>
-          <select id="newTwootType" v-model="selectedTwootType">
-            <option
-              :value="option.value"
-              v-for="(option, index) in twootTypes"
-              :key="index"
-            >
-              {{ option.name }}
-            </option>
-          </select>
-        </div>
-
-        <button>Twoot!</button>
-      </form>
+     
     </div>
+
+<CreateTwootPanel @add-twoot="addTwoot"/>
+
+      </div>
+      
+
     <div class="user-profile__twoots-wrapper">
       <TwootItem
         v-for="twoot in user.twoots"
@@ -43,18 +31,13 @@
 
 <script>
 import TwootItem from "./TwootItem";
+import CreateTwootPanel from "./CreateTwootPannel";
 export default {
   name: "UserProfile",
-  components: { TwootItem },
+  components: { CreateTwootPanel, TwootItem },
   data() {
     return {
-      newTwootContent: "",
-      selectedTwootType: "instant",
-      twootTypes: [
-        { value: "draft", name: "Draft" },
-        { value: "instant", name: "Instant Twoot" },
-      ],
-      followers: 0,
+       followers: 0,
       user: {
         id: 1,
         username: "_ViktoriiaZakorchemna",
@@ -73,41 +56,12 @@ export default {
           },
         ],
       },
-    };
-  },
-  watch: {
-    followers(newFollowerCount, oldFollowerCount) {
-      if (oldFollowerCount < newFollowerCount) {
-        console.log(`${this.user.userName} has gained a follower!`);
-      }
-    },
-  },
-  computed: {
-    fullName() {
-      return `${this.user.firstName} ${this.user.lastName}`;
-    },
-    newTwootCaracterCount() {
-return this.newTwootContent.length;
     }
   },
   methods: {
-    followUser() {
-      this.followers++;
-    },
-    toggleFavourite(id) {
-      console.log(`Favourited Twoot ${id}`);
-    },
-    createNewTwoot() {
-      if (this.newTwootContent && this.selectedTwootType !== "draft") {
-        this.user.twoots.unshift({
-          id: this.user.twoots.length + 1,
-          content: this.newTwootContent,
-        });
-      }
-    },
-  },
-  mounted() {
-    this.followUser();
+    addTwoot(twoot) {
+      this.user.twoots.unshift({id: this.user.twoots.length + 1, content: twoot});
+    }
   },
 };
 </script>
@@ -117,10 +71,8 @@ return this.newTwootContent.length;
   display: flex;
   justify-content: space-between;
   margin: 20px;
-  width: 80vw;
   border: 1px solid #abb2ab;
   border-radius: 5px;
-  background-color: #d0d5d0;
   padding: 10px;
 
   .user-profile__follower-count {
@@ -157,11 +109,7 @@ return this.newTwootContent.length;
       }
     }
   }
-  textarea {
-    width: 300px;
-    border: 1px solid #abb2ab;
-    border-radius: 5px;
-  }
+ 
   .user-profile__twoots-wrapper {
     max-width: 700px;
     width: 100%;
