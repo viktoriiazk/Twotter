@@ -13,10 +13,8 @@
     </div>
 
 <CreateTwootPanel @add-twoot="addTwoot"/>
-
       </div>
       
-
     <div class="user-profile__twoots-wrapper">
       <TwootItem
         v-for="twoot in state.user.twoots"
@@ -30,34 +28,21 @@
 </template>
 
 <script>
-import { reactive} from 'vue';
-import TwootItem from "./TwootItem";
-import CreateTwootPanel from "./CreateTwootPannel";
+import { reactive, computed} from 'vue';
+import { useRoute } from 'vue-router';
+import { users } from '../assets/users';
+import TwootItem from "../components/TwootItem";
+import CreateTwootPanel from "../components/CreateTwootPannel";
 export default {
   name: "UserProfile",
   components: { CreateTwootPanel, TwootItem },
   setup() {
+    const route = useRoute();
+    const userId = computed(() => route.params.userId );
     const state = reactive({
   followers: 0,
-      user: {
-        id: 1,
-        username: "_ViktoriiaZakorchemna",
-        firstName: "Viktoriia",
-        lastName: "Zakorchemna",
-        email: "viktoriia.zakorchemna@gmail.com",
-        isAdmin: false,
-        twoots: [
-          {
-            id: 1,
-            content: "twooter is Amazing!",
-          },
-          {
-            id: 2,
-            content: "Don't forget to subscriber to The Earth is Square!",
-          }
-        ]
-      }
-    })
+      user: users[userId.value - 1] || users[0] 
+    });
 
 function  addTwoot(twoot) {
       state.user.twoots.unshift({id: state.user.twoots.length + 1, content: twoot});
@@ -65,7 +50,8 @@ function  addTwoot(twoot) {
 
     return {
       state,
-      addTwoot
+      addTwoot,
+      userId
     }
   }
 
