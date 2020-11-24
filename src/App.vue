@@ -6,7 +6,7 @@
       Twotter
     </div>
     </router-link>
-    <div class="navigation__user">
+    <div class="navigation__user" v-if="user">
       {{ user.username }}
     </div>
   </nav>
@@ -22,8 +22,7 @@ export default {
 name: 'App',
 setup() {
   const store = useStore();
-const user = computed(() => store.state.user);
-
+const user = computed(() => store.state.User.user);
 
   return {
     user
